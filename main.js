@@ -5,55 +5,41 @@ var Root= React.createClass({
 
   getInitialState: function() {
     return {
-      count: 0,
+      counters: {
+        one: 0,
+        two: 0
+      },
       timer: 0,
       interavalId: null
       
     }
   },
-  addCount: function() {
+  addCount: function(arg, event) {
+    // e.persist();
+
+    let counters = Object.assign({}, this.state.counters); //shallow copy of the object
+
+    counters[arg] += 1;
+
+    // this.state.counters[arg] += 1;
+
     this.setState({
-      count: this.state.count + 1
+      counters: counters
     })
     
     
   },
-  decrementCount: function() {
-    if(this.state.count > 0) {
+  decrementCount: function(arg, event) {
+    
+     
+    if(this.state.counters[arg] > 0) {
+    // this.state.counters[arg] -= 1;
+    let counters = Object.assign({}, this.state.counters);
+    counters[arg] -= 1;
     this.setState({
-      count: this.state.count - 1
+      counters: counters
     })
     }
-  },
-
-   toggleTimer: function() {
-      if (!this.state.interavalId) {
-        this.setState({
-          interavalId: setInterval(() => {
-            this.setState({
-              timer: this.state.timer + 1
-            })
-          }, 1000)
-        })
-      
-    } else {
-      if (this.state.interavalId) {
-
-        clearInterval(this.state.interavalId);
-        this.setState({
-          interavalId: null
-        })
-
-      }
-
-    }
-  },
-  resetTimer: function() {
-    clearInterval(this.state.interavalId);
-    this.setState({
-      interavalId: null,
-      timer: 0
-    })
   },
 
 
@@ -61,13 +47,13 @@ var Root= React.createClass({
     return (
       <div>
         <h1>Hello from Root Component</h1>
-        <h3>Time: {this.state.timer}</h3>
-        <button onClick={this.toggleTimer}>{this.state.interavalId ? 'Stop' : 'Start'}</button>
-        <button onClick={this.resetTimer}>Reset</button>
-        <p>Let's count stuff</p>
-        <h3>Counter: {this.state.count}</h3>
-        <button onClick={this.addCount}>+</button>
-        <button onClick={this.decrementCount}>-</button>
+        <h3>Counter 1: {this.state.counters.one}</h3>
+        <button id='1' onClick={this.addCount.bind(this, 'one')}>+</button>
+        <button onClick={this.decrementCount.bind(this, 'one')}>-</button>
+
+        <h3>Counter 2: {this.state.counters.two}</h3>
+        <button id='2' onClick={this.addCount.bind(this, 'two')}>+</button>
+        <button onClick={this.decrementCount.bind(this, 'two')}>-</button>        
       </div>
     )
   }
