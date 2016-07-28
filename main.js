@@ -36,13 +36,23 @@ var Counter = React.createClass({
 });
 
 var Message = React.createClass({
+  getInitialState: function() {
+    return {
+      text: this.props.message,
+      editing: false
+    }
+  },
   render: function() {
     console.log(this.props);
-    let {message, deleteMessage, id} = this.props;
+    let { deleteMessage, id} = this.props;
+    let message = this.state.editing ? 
+                  <input value={this.state.text} onChange={ e => this.setState({text: e.target.value})}/> :   
+                  this.state.text
     return(
     <li>
       {message}
       <button onClick={() => deleteMessage(id)}>Delete</button>
+      <button onClick={() => {this.setState({ editing: !this.state.editing })}}>{this.state.editing ? 'Confirm' : 'Edit'}</button>
     </li>
     )
   }
@@ -104,15 +114,7 @@ var Root= React.createClass({
   },
 
   render: function() {
-    let message = {
-      greeting: "Hello World",
-      info: "Let's count stuff"
-    }
-    let count = {
-      addCount: this.addCount,
-      minusCount: this.minusCount,
-      count: this.state.count
-    }
+    
       console.log(this.state);
       let messages = this.state.messages.map((message, i) => {
         return <Message key={message.id} {...message} deleteMessage={this.deleteMessage} />
