@@ -1,67 +1,138 @@
+var Welcome = React.createClass({
+  render: function() {
+    // console.log(this.props);
+    let {greeting, info} = this.props;
+
+    return (
+      <div>
+        <h1>{greeting}</h1>
+        <p>{info}</p>
+      </div>
+
+      )
+  }
+})
 
 
-
-var Root= React.createClass({
+var Counter = React.createClass({
 
   getInitialState: function() {
     return {
-      counters: {
-        one: 0,
-        two: 0
-      },
-      timer: 0,
-      interavalId: null
-      
+      count: 0
     }
   },
-  addCount: function(arg, event) {
-    // e.persist();
-
-    let counters = Object.assign({}, this.state.counters); //shallow copy of the object
-
-    counters[arg] += 1;
-
-    // this.state.counters[arg] += 1;
-
-    this.setState({
-      counters: counters
-    })
-    
-    
-  },
-  decrementCount: function(arg, event) {
-    
-     
-    if(this.state.counters[arg] > 0) {
-    // this.state.counters[arg] -= 1;
-    let counters = Object.assign({}, this.state.counters);
-    counters[arg] -= 1;
-    this.setState({
-      counters: counters
-    })
-    }
-  },
-
-
   render: function() {
-    return (
-      <div>
-        <h1>Hello from Root Component</h1>
-        <h3>Counter 1: {this.state.counters.one}</h3>
-        <button id='1' onClick={this.addCount.bind(this, 'one')}>+</button>
-        <button onClick={this.decrementCount.bind(this, 'one')}>-</button>
+    let {minusCount, count, num, addCount} = this.props;
+    // console.log(this.props.num);
+   return (
+    <div>
+        <h3>Counter {num}: {count}</h3>
+        <button onClick={addCount}>+</button>
+        <button onClick={minusCount}>-</button>
+    </div>
 
-        <h3>Counter 2: {this.state.counters.two}</h3>
-        <button id='2' onClick={this.addCount.bind(this, 'two')}>+</button>
-        <button onClick={this.decrementCount.bind(this, 'two')}>-</button>        
-      </div>
+    )
+}
+});
+
+var Message = React.createClass({
+  render: function() {
+    console.log(this.props);
+    let {message, deleteMessage, id} = this.props;
+    return(
+    <li>
+      {message}
+      <button onClick={() => deleteMessage(id)}>Delete</button>
+    </li>
     )
   }
 })
 
 
+var MessageForm = React.createClass({
+  getInitialState: function() {
+    return {
+      message: ''
+    }
+  },
+  onAddMessage: function() {
+    let {addMessage} = this.props;
+    let message = this.state.message;
+    addMessage(message);
+  },
+  render: function() {
+    return (
+      <div>
+        <input type="text" 
+        value= {this.state.message}
+        onChange={e => this.setState({message: e.target.value})}
+        />
+        <button onClick={this.onAddMessage}>Submit</button>
+        <p>{this.state.message}</p>
+      </div>
+      )
+  }
+})
 
+var Root= React.createClass({
 
+  getInitialState: function() {
+    return {
+      count: 0,
+      messages: []
+    }
+  },
+  addMessage: function(message) {
+    console.log(message);
+    let newMessage = {
+      message: message,
+      id: uuid()
+    }
+    // let newArr = this.state.messages.slice(0);
+    // newArr.push(message);
+    this.setState({messages: this.state.messages.concat(newMessage)});
+
+  },
+  deleteMessage: function(id) {
+    this.setState({messages: this.state.messages.filter(message => message.id != id)})
+  },
+  addCount: function() {
+    this.setState({ count: this.state.count + 1})
+  },
+  minusCount: function() {
+    this.setState({ count: this.state.count - 1})
+  },
+
+  render: function() {
+    let message = {
+      greeting: "Hello World",
+      info: "Let's count stuff"
+    }
+    let count = {
+      addCount: this.addCount,
+      minusCount: this.minusCount,
+      count: this.state.count
+    }
+      console.log(this.state);
+      let messages = this.state.messages.map((message, i) => {
+        return <Message key={message.id} {...message} deleteMessage={this.deleteMessage} />
+      })
+
+    return (
+      <div>
+        <Welcome {...message}/>
+
+        <MessageForm addMessage = {this.addMessage} />
+        <ul>
+          {messages}
+        </ul>
+        <Counter {...count} num={1}/>
+        <Counter {...count} num={2}/>
+        <Counter {...count} num={3}/>         
+      </div>
+    )
+  }
+})
 
  ReactDOM.render(
       <Root />,
