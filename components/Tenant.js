@@ -9,7 +9,7 @@ export default class Tenant extends Component {
   }
   render() {
 
-      console.log('from tenatn',this.props);
+      console.log('from tenant',this.props);
       let {name, age, address} = this.props;
     return  (
       <tr>
