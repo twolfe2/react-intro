@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import TenantActions from '../actions/TenantActions'
 
 
 
@@ -19,11 +20,15 @@ export default class TenantForm extends Component {
   }
   
 
-  onFormSubmit() {
+  onFormSubmit(e) {
+    e.preventDefault();
     let {onSubmit} = this.props;
     console.log('this.state', this.state);
     let newTenant = this.state;
-    onSubmit(newTenant);
+    console.log('1. On submit fired in Tenant Form component, tenant: ', newTenant);
+    console.log('***Firing TenantActions.addNewTenant***');
+    TenantActions.addNewTenant(newTenant);
+    // onSubmit(newTenant);
     this.setState({name: '', address: '', age: 0});
   }
 

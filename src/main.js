@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Router, Route, Link, browserHistory, IndexRoute, hashHistory} from 'react-router'
 
-import App from '../components/App'
-import Welcome from '../components/Welcome'
-import Tenants from '../components/Tenants'
-import Properties from '../components/Properties'
+import App from './components/App'
+import Welcome from './components/Welcome'
+import Tenants from './components/Tenants'
+import Properties from './components/Properties'
 
 ReactDOM.render(
 
